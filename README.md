@@ -50,8 +50,8 @@ _GREEN led only_
 In this mode, it reacts like a normal ST25TB-AT cards, with few differences:
 - Sectors `0x05` and `0x06` are not limited to decrement ;
 - Sector `0xff` (system area) is not used to lock sectors/OTP ;
-- Sectors `0x7e` and `0x7f` can be used to read **and write** UID ;
-- Any writing operation to sector `0x60` will write current emulated card into flash memory.
+- Sectors `0x8e` and `0x8f` can be used to read **and write** UID ;
+- Any writing operation to sector `0x99` will write current emulated card into flash memory.
 
 _basically, it reacts like a memory card without limitation_
 

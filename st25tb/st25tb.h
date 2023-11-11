@@ -32,6 +32,21 @@
 #error Target is not supported !
 #endif
 
+/* 
+ * Memory size selection between 512 (default), 2K and 4K 
+ */
+
+#if defined(ST25TB_MEM_2K)
+#define ST25TB_BLOCK_NUM 0x40
+#define ST25TB_PRODUCT_CODE 0x3F
+#elif defined(ST25TB_MEM_4K)
+#define ST25TB_BLOCK_NUM 0x80
+#define ST25TB_PRODUCT_CODE 0x1F
+#else
+#define ST25TB_BLOCK_NUM 0x10
+#define ST25TB_PRODUCT_CODE 0x33
+#endif
+
 typedef enum __attribute__((__packed__)) _tSt25TbState {
     Invalid,
     PowerOff,

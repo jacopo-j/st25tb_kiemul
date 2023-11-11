@@ -27,9 +27,9 @@ uint8_t ST25TB_Target_AdjustIdxForSpecialAddr(uint8_t original)
     {
     case 0xff:
         return ST25TB_CARDS_INDEX_SYSTEM;
-    case 0x7e:
+    case 0x8e:
         return ST25TB_CARDS_INDEX_UID;
-    case 0x7f:
+    case 0x8f:
         return ST25TB_CARDS_INDEX_UID_2;
     default:
         return original;
@@ -108,9 +108,9 @@ tSt25TbState ST25TB_Target_StateMachine()
         {
             if (g_ui8FifoBuffer[0] == ST25TB_CMD_READ_BLOCK)
             {
-                idx = ST25TB_Target_AdjustIdxForSpecialAddr(g_ui8FifoBuffer[1]);
-                if(idx < 0x13)
+                if (g_ui8FifoBuffer[1] < ST25TB_BLOCK_NUM || g_ui8FifoBuffer[1] == 0xff || g_ui8FifoBuffer[1] == 0x8e || g_ui8FifoBuffer[1] == 0x8f)
                 {
+                    idx = ST25TB_Target_AdjustIdxForSpecialAddr(g_ui8FifoBuffer[1]);
                     pcbData = ST25TB_CARDS_CurrentCard[idx];
                     cbData = sizeof(ST25TB_CARDS_CurrentCard[0]);
                     delay = ST25TB_TARGET_GLOBAL_DELAY_US + ST25TB_TARGET_SMALL_DELAY_US;
@@ -119,12 +119,12 @@ tSt25TbState ST25TB_Target_StateMachine()
         }
         else if ((g_ui8cbFifoBuffer == 6) && (g_ui8FifoBuffer[0] == ST25TB_CMD_WRITE_BLOCK))
         {
-            idx = ST25TB_Target_AdjustIdxForSpecialAddr(g_ui8FifoBuffer[1]);
-            if(idx < 0x13)
+            if (g_ui8FifoBuffer[1] < ST25TB_BLOCK_NUM || g_ui8FifoBuffer[1] == 0xff || g_ui8FifoBuffer[1] == 0x8e || g_ui8FifoBuffer[1] == 0x8f)
             {
+                idx = ST25TB_Target_AdjustIdxForSpecialAddr(g_ui8FifoBuffer[1]);
                 *(uint32_t *) ST25TB_CARDS_CurrentCard[idx] = *(uint32_t *) (g_ui8FifoBuffer + 2);
             }
-            else if(idx == 0x60)
+            else if(g_ui8FifoBuffer[1] == 0x99)
             {
                 ST25TB_CARDS_toSlot(0); // maybe move at the end for Flash operation ? (slow, even if ret is not really needed)
                 pcbData = ST25TB_TARGET_KIWI_SPECIAL_RETCODE_OK;

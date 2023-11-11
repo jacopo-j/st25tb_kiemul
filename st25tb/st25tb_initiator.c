@@ -28,7 +28,7 @@ uint8_t ST25TB_Initiator_Read_Card()
             BP_IrqSource = ST25TB_Initiator_CMD_CONFIRMED_Get_Uid((uint8_t *) ST25TB_CARDS_CurrentCard[ST25TB_CARDS_INDEX_UID]);
             if(BP_IrqSource == BP_IRQ_SOURCE_NONE)
             {
-                for(i = 0x00; (i < 0x10) && (BP_IrqSource == BP_IRQ_SOURCE_NONE); i++)
+                for(i = 0x00; (i < ST25TB_BLOCK_NUM) && (BP_IrqSource == BP_IRQ_SOURCE_NONE); i++)
                 {
                     BP_IrqSource = ST25TB_Initiator_CMD_CONFIRMED_Read_Block(i, ST25TB_CARDS_CurrentCard[i]);
                 }
@@ -60,7 +60,7 @@ uint8_t ST25TB_Initiator_Write_Card()
             {
                 if ((*(uint64_t*) ui8UID) == (*(uint64_t*) ST25TB_CARDS_CurrentCard[ST25TB_CARDS_INDEX_UID]))
                 {
-                    for(i = 0x00; (i < 0x10) && (BP_IrqSource == BP_IRQ_SOURCE_NONE); i++)
+                    for(i = 0x00; (i < ST25TB_BLOCK_NUM) && (BP_IrqSource == BP_IRQ_SOURCE_NONE); i++)
                     {
 #if defined(ST25TB_DO_NOT_WRITE_DANGEROUS_SECTOR)
                         if((i == 5) || (i == 6))
